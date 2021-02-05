@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Профиль {{ current_user.get_short_name }}{% endblock %}
+{% block content %}
+
+    <main role="main" class="container">
+        <div class="row">
+                <div class="col-md-3 mb-3 mt-5">
+                        <div class="card">
+                                <div class="card-body">
+                                        <div class="h3">
+                                            <!-- Имя автора -->
+                                            {{ current_user.get_short_name }}
+                                        </div>
+                                        <div class="h3 text-muted">
+                                            <!-- username автора -->
+                                            Code: {{ current_user.invite_code }}
+                                        </div>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">
+                                                <div class="h6 text-muted">
+                                                Referred: {{ current_user.referred.count }} <br />
+                                                </div>
+                                        </li>
+                                        {% if has_invite %}
+                                        <li class="list-group-item">
+                                            <li class="list-group-item">
+                                                <div class="h6 text-muted">
+                                                Referrer:<a href="{% url 'refprofile-view' referrer.referrer.invite_code %}">{{ referrer.referrer.invite_code }}</a> <br />
+                                                </div>
+                                            </li>
+                                        </li>
+                                        {% else %}
+                                            {% if user == current_user %}
+                                            <form action="{% url 'invite' %}" method="post">
+                                                {% csrf_token %}
+                                                <div class="form-inline">
+                                                    <div class="col- my-1">
+                                                        {{ form.invite_code|as_crispy_field }}
+                                                    </div>
+                                                    <div class="col-auto my-1">
+                                                        <button type="submit" class="btn btn-primary mb-2">Submit</button>
+                                                    </div>
+                                                </div>
+                                              </form>
+                                            {% else %}
+                                            <li class="list-group-item">
+                                                <li class="list-group-item">
+                                                    <div class="h6 text-muted">
+                                                    Referrer: - <br />
+                                                    </div>
+                                                </li>
+                                            </li>
+                                            {% endif %}
+                                        {% endif %}
+                                </ul>
+                        </div>
+                </div>
+
+                <div class="col-md-5 mb-3 mt-5">                
+
+                    <!-- Начало блока с отдельным постом -->
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">Referrer</th>
+                            <th scope="col">Referred</th>
+                          </tr>
+                        </thead>
+                    {% for referral in page %}
+                        <tbody>
+                          <tr>
+                            <td>{{ referral.referrer }}</td>
+                            <td><a href="{% url 'refprofile-view' referral.referred.invite_code %}">{{ referral.referred }}</a></td>
+                          </tr>
+                        </tbody>
+
+                    {% endfor %}
+                    </table>
+                    <!-- Конец блока с отдельным постом --> 
+
+                    <!-- Остальные посты -->  
+
+                    <!-- Здесь постраничная навигация паджинатора -->
+                    {% if page.has_other_pages %}
+                        {% include 'paginator.html' with items=page paginator=paginator %}
+                    {% endif %}
+        </div>
+        </div>
+    </main>
+
+{% endblock %}
