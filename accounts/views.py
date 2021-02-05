@@ -3,6 +3,7 @@ from codes.forms import CodeForm
 from django.contrib.auth import authenticate, get_user_model, login
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+import time
 
 from .forms import UserLoginForm
 
@@ -54,6 +55,7 @@ def verify_view(request):
             if str(code) == num:
                 code.save()
                 login(request, user)
+                time.sleep(2)
                 return redirect(reverse('profile-view'))
 
             return redirect(reverse('login-view'))
