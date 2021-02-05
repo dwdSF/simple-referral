@@ -5,4 +5,4 @@ class CodesConfig(AppConfig):
     name = 'codes'
 
     def ready(self):
-        import codes.signals # noqa
+        import codes.signals  # noqa

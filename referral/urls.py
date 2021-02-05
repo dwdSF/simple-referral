@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import profile_view, invite_activation, referrer_profile
 
+from .views import invite_activation, profile_view, referrer_profile
 
 urlpatterns = [
     path('', profile_view, name='profile-view'),

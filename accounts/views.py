@@ -1,10 +1,10 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from .forms import UserLoginForm
-from codes.forms import CodeForm
-from django.urls import reverse
 # from .utils import send_sms
+from codes.forms import CodeForm
 from django.contrib.auth import authenticate, get_user_model, login
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 
+from .forms import UserLoginForm
 
 User = get_user_model()
 
@@ -59,3 +59,14 @@ def verify_view(request):
             return redirect(reverse('login-view'))
 
     return render(request, 'verify.html', {'form': form})
+
+
+def page_not_found(request, exception):
+    context = {
+        'path': request.path
+    }
+    return render(request, 'misc/404.html', context, status=404)
+
+
+def server_error(request):
+    return render(request, 'misc/500.html', status=500)

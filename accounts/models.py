@@ -1,9 +1,9 @@
+from codes.utils import code_generator
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.core.validators import RegexValidator
 from django.db import models
 
 from .managers import UserManager
-from codes.utils import code_generator
 
 
 class User(AbstractBaseUser, PermissionsMixin):
